@@ -22,6 +22,7 @@ public class Product {
     private int stock;
     private int min;
     private int max;
+    static int productCounter;
     
     
     // Constructor
@@ -95,21 +96,21 @@ public class Product {
     }
     
     //Other Methods
-    public void addAssociatedPart(Part part){
-        
+    public void addAssociatedPart(Part part){   
         associatedParts.add(part);
-        
     }
     
-    public void deleteAssociatedPart(Part associatedPart){
-
-        
+    public void deleteAssociatedPart(Part associatedPart){   
+        associatedParts.remove(associatedPart);    
     }
     
     public ObservableList<Part> getAllAssociatedParts(){
         return associatedParts;
     }
     
-    
+    public static int getProductCounter(){   
+        productCounter++;
+        return productCounter;
+    }
     
 }
