@@ -16,9 +16,11 @@ public class Inventory{
     
     //Fields
     private static ObservableList<Part> allParts = FXCollections.observableArrayList();
+    private static ObservableList<Part> searchedParts = FXCollections.observableArrayList();
     private static ObservableList<Product> allProducts = FXCollections.observableArrayList();
-    private static int partCounter = 0;
-    private static int productCounter = 0;
+    private static ObservableList<Product> searchedProducts = FXCollections.observableArrayList();
+    
+
     //Methods
     
     /*  All
@@ -50,15 +52,29 @@ public class Inventory{
     //Lookup Part by ID
     public static Part lookupPart(int partId){
  
-        return null;
+        int index = -1;
+        for (int i = 0; i < allParts.size(); i++){
+            if (allParts.get(i).getId() == partId){
+                index = i;
+            }
+        }
+        
+        return allParts.get(index);
     }
         
     
     //Lookup Part by Name
     public static ObservableList<Part> lookupPart(String partName){
    
-        return null;
-   
+        searchedParts.clear();
+        
+        for (int i = 0; i < allParts.size(); i++){
+            if (allParts.get(i).getName().equals(partName)){
+                searchedParts.add(allParts.get(i));
+            }
+        }
+        
+        return searchedParts;
     }
 
     
@@ -69,13 +85,6 @@ public class Inventory{
     
     }
     
-    //Returns ID numbers for Parts
-    public static int getPartCounter(){
-        
-        partCounter++;
-        return partCounter;
-        
-    }
     
     /*  All
         Products
@@ -107,14 +116,29 @@ public class Inventory{
     //Lookup Product by ID
     public static Product lookupProduct(int productId){
         
-        return null;
+        int index = -1;
+        for (int i = 0; i < allProducts.size(); i++){
+            if (allProducts.get(i).getId() == productId){
+                index = i;
+            }
+        }
+        
+        return allProducts.get(index);
     
     }
     
     //Lookup Product by name
     public static ObservableList<Product> lookupProduct(String productName){
        
-        return null;
+        searchedProducts.clear();
+        
+        for (int i = 0; i < allProducts.size(); i++){
+            if (allProducts.get(i).getName().equals(productName)){
+                searchedProducts.add(allProducts.get(i));
+            }
+        }
+        
+        return searchedProducts;
     
     }
   
@@ -126,13 +150,7 @@ public class Inventory{
     
     }
     
-    //Returns ID numbers for Products
-    public static int getProductCounter(){
-        
-        productCounter++;
-        return productCounter;
-        
-    }
 
     
 }
+
