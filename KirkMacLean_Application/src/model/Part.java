@@ -20,6 +20,7 @@ public abstract class Part {
     private int stock;
     private int min;
     private int max;
+    static int partCounter;
     
     // Constructor
     public Part(int id, String name, double price, int stock, int min, int max) {
@@ -91,5 +92,8 @@ public abstract class Part {
         this.price = max;
     }
     
-    
+    public static int getPartCounter(){   
+        partCounter++;
+        return partCounter;
+    }
 }
