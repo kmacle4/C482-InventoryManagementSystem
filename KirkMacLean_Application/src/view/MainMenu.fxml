@@ -1,0 +1,149 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+
+<AnchorPane id="AnchorPane" prefHeight="500.0" prefWidth="1100.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.MainMenuController">
+   <children>
+      <HBox layoutY="20.0" prefHeight="33.0" prefWidth="1100.0">
+         <children>
+            <Label fx:id="inventoryManagementSystemLabel" alignment="CENTER" layoutY="10.0" text="Inventory Management System">
+               <font>
+                  <Font name="System Bold" size="24.0" />
+               </font>
+               <padding>
+                  <Insets left="25.0" />
+               </padding>
+            </Label>
+         </children>
+      </HBox>
+      <Pane layoutX="20.0" layoutY="55.0" prefHeight="375.0" prefWidth="525.0" style="-fx-border-style: solid inside;">
+         <children>
+            <VBox alignment="CENTER" prefHeight="375.0" prefWidth="525.0">
+               <children>
+                  <HBox alignment="TOP_CENTER" prefHeight="100.0" prefWidth="200.0">
+                     <children>
+                        <Label text="Parts">
+                           <HBox.margin>
+                              <Insets left="20.0" right="20.0" top="20.0" />
+                           </HBox.margin>
+                           <font>
+                              <Font size="22.0" />
+                           </font>
+                        </Label>
+                        <Button fx:id="searchPartBtn" maxHeight="25.0" maxWidth="100.0" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#onActionSearchPart" text="Search">
+                           <HBox.margin>
+                              <Insets left="150.0" right="25.0" top="15.0" />
+                           </HBox.margin>
+                        </Button>
+                        <TextField fx:id="partSearchText" alignment="CENTER_RIGHT">
+                           <HBox.margin>
+                              <Insets top="15.0" />
+                           </HBox.margin>
+                        </TextField>
+                     </children>
+                  </HBox>
+                  <TableView fx:id="partsTableView" maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="300.0" prefWidth="500.0">
+                    <columns>
+                      <TableColumn fx:id="partIdCol" prefWidth="125.0" text="Part ID" />
+                      <TableColumn fx:id="partNameCol" prefWidth="125.0" text="Part Name" />
+                        <TableColumn fx:id="partInvCol" prefWidth="125.0" text="Inventory Level" />
+                        <TableColumn fx:id="partPriceCol" prefWidth="125.0" text="Price/Cost per Unit" />
+                    </columns>
+                  </TableView>
+                  <HBox alignment="TOP_CENTER" prefHeight="100.0" prefWidth="200.0">
+                     <children>
+                        <Button fx:id="addPartBtn" maxWidth="56.0" mnemonicParsing="false" onAction="#onActionAddPart" text="Add" HBox.hgrow="ALWAYS">
+                           <HBox.margin>
+                              <Insets left="200.0" top="20.0" />
+                           </HBox.margin>
+                        </Button>
+                        <Button fx:id="modifyPartBtn" maxWidth="56.0" mnemonicParsing="false" onAction="#onActionModifyPart" text="Modify">
+                           <HBox.margin>
+                              <Insets left="20.0" top="20.0" />
+                           </HBox.margin>
+                        </Button>
+                        <Button fx:id="deletePartBtn" layoutX="10.0" layoutY="10.0" maxWidth="56.0" mnemonicParsing="false" onAction="#onActionDeletePart" text="Delete">
+                           <HBox.margin>
+                              <Insets left="20.0" top="20.0" />
+                           </HBox.margin>
+                        </Button>
+                     </children>
+                  </HBox>
+               </children>
+            </VBox>
+         </children>
+      </Pane>
+      <Pane layoutX="550.0" layoutY="55.0" prefHeight="375.0" prefWidth="525.0" style="-fx-border-style: solid inside;">
+         <children>
+            <VBox alignment="CENTER" prefHeight="375.0" prefWidth="525.0">
+               <children>
+                  <HBox alignment="TOP_CENTER" prefHeight="100.0" prefWidth="200.0">
+                     <children>
+                        <Label text="Products">
+                           <HBox.margin>
+                              <Insets left="20.0" top="20.0" />
+                           </HBox.margin>
+                           <font>
+                              <Font size="22.0" />
+                           </font>
+                        </Label>
+                        <Button fx:id="searchProductBtn" maxHeight="25.0" maxWidth="100.0" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#onActionSearchProduct" text="Search">
+                           <HBox.margin>
+                              <Insets left="150.0" right="25.0" top="15.0" />
+                           </HBox.margin>
+                        </Button>
+                        <TextField fx:id="productSearchText" alignment="CENTER_RIGHT">
+                           <HBox.margin>
+                              <Insets top="15.0" />
+                           </HBox.margin>
+                        </TextField>
+                     </children>
+                  </HBox>
+                  <TableView fx:id="productTableView" maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="300.0" prefWidth="500.0">
+                     <columns>
+                        <TableColumn fx:id="productIdCol" prefWidth="125.0" text="Product ID" />
+                        <TableColumn fx:id="productNameCol" prefWidth="125.0" text="Paroduct Name" />
+                        <TableColumn fx:id="productInvCol" prefWidth="125.0" text="Inventory Level" />
+                        <TableColumn fx:id="productPriceCol" prefWidth="125.0" text="Price/Cost per Unit" />
+                     </columns>
+                  </TableView>
+                  <HBox alignment="TOP_CENTER" prefHeight="100.0" prefWidth="200.0">
+                     <children>
+                        <Button fx:id="addProductBtn" maxWidth="56.0" mnemonicParsing="false" onAction="#onActionAddProduct" text="Add" HBox.hgrow="ALWAYS">
+                           <HBox.margin>
+                              <Insets left="200.0" top="20.0" />
+                           </HBox.margin>
+                        </Button>
+                        <Button fx:id="modifyProductBtn" maxWidth="56.0" mnemonicParsing="false" onAction="#onActionModifyProduct" text="Modify">
+                           <HBox.margin>
+                              <Insets left="20.0" top="20.0" />
+                           </HBox.margin>
+                        </Button>
+                        <Button fx:id="deleteProductBtn" layoutX="10.0" layoutY="10.0" maxWidth="56.0" mnemonicParsing="false" onAction="#onActionDeleteProduct" text="Delete">
+                           <HBox.margin>
+                              <Insets left="20.0" top="20.0" />
+                           </HBox.margin>
+                        </Button>
+                     </children>
+                  </HBox>
+               </children>
+            </VBox>
+         </children>
+      </Pane>
+      <HBox alignment="TOP_CENTER" layoutX="900.0" layoutY="450.0" prefHeight="50.0" prefWidth="100.0">
+         <children>
+            <Button fx:id="exitAppButton" alignment="CENTER" maxWidth="56.0" mnemonicParsing="false" onAction="#onActionExit" text="Exit" textAlignment="CENTER" HBox.hgrow="ALWAYS" />
+         </children>
+      </HBox>
+   </children>
+</AnchorPane>
