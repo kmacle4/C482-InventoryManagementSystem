@@ -67,8 +67,8 @@ public class ModifyPartMenuController implements Initializable {
     Stage stage;
     Parent scene;
     private boolean isInHouse;
-    private int id;
-    Part part;
+    private Part part;
+    private static int index;
     
     /**
      * Initializes the controller class.
@@ -99,66 +99,80 @@ public class ModifyPartMenuController implements Initializable {
     @FXML
     void onActionSaveMod(ActionEvent event) throws IOException {
         
+       
+       int id = Integer.parseInt(modifyIdText.getText());
+       String name = modifyNameText.getText();
+       double price = Double.parseDouble(modifyPriceText.getText());
+       int stock = Integer.parseInt(modifyInvText.getText());
+       int min = Integer.parseInt(modifyMinText.getText());
+       int max = Integer.parseInt(modifyMaxText.getText());
+       
+       if(min > max){
+           Alert alert = new Alert(Alert.AlertType.WARNING);
+           alert.setTitle("Error");
+           alert.setContentText("Minimum is greater than Maximum");
+           alert.showAndWait();
+       }
+       else{
+           try{
+               if(isInHouse){
+                   int machineId = Integer.parseInt(modifyChangeLabel.getText());
+                   
+                   InHouse part = new InHouse(id, name, price, stock, min, max, machineId);
+                   
+                   Inventory.updatePart(index, part);
+                   
+                   //SUCCESSFUL
+                   Alert alert = new Alert(Alert.AlertType.INFORMATION);
+                   alert.setTitle("SUCCESSFUL");
+                   alert.setContentText("Modification Successful");
+                   alert.showAndWait();
+                   
+                   stage = (Stage)((Button)event.getSource()).getScene().getWindow();
         
-        String name = modifyNameText.getText();
-        double price = Double.parseDouble(modifyPriceText.getText());
-        int stock = Integer.parseInt(modifyInvText.getText());
-        int min = Integer.parseInt(modifyMinText.getText());
-        int max = Integer.parseInt(modifyMaxText.getText());
+                    FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/MainMenu.fxml"));
         
-        try{
-            if(isInHouse){
+                    scene = loader.load();
 
-                int machineId = Integer.parseInt(modifyChangeText.getText());
+                    Scene view = new Scene(scene);
 
-                InHouse inHouseMod = new InHouse(id, name, price, stock, min, max, machineId);
-                inHouseMod.setId(id);
-                inHouseMod.setName(name);
-                inHouseMod.setPrice(price);
-                inHouseMod.setStock(stock);
-                inHouseMod.setMin(min);
-                inHouseMod.setMax(max);
-                inHouseMod.setMachineId(machineId);
-                Inventory.updatePart(id, inHouseMod);
-            }
-            else {
-            
-                String companyName = modifyChangeText.getText();
+                    stage.setScene(view);
 
-                Outsourced outsourcedMod = new Outsourced(id, name, price, stock, min, max, String.valueOf(companyName));
-                outsourcedMod.setId(id);
-                outsourcedMod.setName(name);
-                outsourcedMod.setPrice(price);
-                outsourcedMod.setStock(stock);
-                outsourcedMod.setMin(min);
-                outsourcedMod.setMax(max);
-                outsourcedMod.setCompanyName(String.valueOf(companyName));
-                Inventory.updatePart(id, outsourcedMod);
-            
-            
-            }
-        }
-        catch (NumberFormatException e) {
-            Alert alert = new Alert(Alert.AlertType.WARNING);
-            alert.setTitle("Warning Dialogue");
-            alert.setContentText("Please enter a valid value for each text field!");
-            alert.showAndWait();
-        }
+                    stage.show();
+               }
+               else{
+                   String companyName = modifyChangeLabel.getText();
+                   
+                   Outsourced part = new Outsourced(id, name, price, stock, min, max, companyName);
+                   
+                   Inventory.updatePart(index, part);
+                   
+                   //SUCCESSFUL
+                   Alert alert = new Alert(Alert.AlertType.INFORMATION);
+                   alert.setTitle("SUCCESSFUL");
+                   alert.setContentText("Modification Successful");
+                   alert.showAndWait();
+                   
+                   stage = (Stage)((Button)event.getSource()).getScene().getWindow();
+        
+                    FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/MainMenu.fxml"));
+        
+                    scene = loader.load();
 
-        
-        stage = (Stage)((Button)event.getSource()).getScene().getWindow();
-        
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/MainMenu.fxml"));
-        
-        scene = loader.load();
-        
-        Scene view = new Scene(scene);
-        
-        stage.setScene(view);
-        
-        stage.show();
-        
+                    Scene view = new Scene(scene);
 
+                    stage.setScene(view);
+
+                    stage.show();
+               }
+           }
+           catch(NumberFormatException e){
+               Alert alert = new Alert(Alert.AlertType.ERROR);
+               alert.setTitle("Error");
+               alert.setContentText("Error Modifying Part");
+               alert.showAndWait();
+           }
+       }
     }
     
     @FXML
@@ -166,13 +180,10 @@ public class ModifyPartMenuController implements Initializable {
 
         System.out.println("In House selected");
         
-        //If InHouse Radio button is selected
-        //set isInHouse to true and change label
-        if (inHouseModRBtn.isSelected()){
-            isInHouse = true;
-            modifyChangeLabel.setText("Machine ID");
-            outsourceModRBtn.setSelected(false);
-        }
+        isInHouse = true;
+        modifyChangeLabel.setText("Machine ID");
+        outsourceModRBtn.setSelected(false);
+        
     }
 
     @FXML
@@ -180,30 +191,18 @@ public class ModifyPartMenuController implements Initializable {
 
         System.out.println("Outsourced selected");
         
-        //If InHouse Radio button is selected
-        //set isInHouse to true and change label
-        if (outsourceModRBtn.isSelected()){
-            isInHouse = false;
-            modifyChangeLabel.setText("Company Name");
-            inHouseModRBtn.setSelected(false);
-        }
+        isInHouse = false;
+        modifyChangeLabel.setText("Company Name");
+        inHouseModRBtn.setSelected(false);
+        
         
     }
     
-    public void setFields(Part part){
-        this.part = part;
-        
-        String name = null;
-        double price = 0.00;
-        int stock = 0;
-        int min = 0;
-        int max = 0;
-        int machineId = 0;
-        String companyName = null;
-        
-        InHouse inhousePart = new InHouse(id, name, price, stock, min, max, machineId);
-        Outsourced outPart = new Outsourced (id, name, price, stock, min, max, companyName);
-        
+  
+    @Override
+    public void initialize(URL url, ResourceBundle rb) {
+        part = MainMenuController.selectedPart;
+        index = MainMenuController.selectedPartIndex;
         
         modifyIdText.setText(Integer.toString(part.getId()));
         modifyNameText.setText(part.getName());
@@ -212,21 +211,18 @@ public class ModifyPartMenuController implements Initializable {
         modifyMinText.setText(Integer.toString(part.getMin()));
         modifyMaxText.setText(Integer.toString(part.getMax()));
         
-        
-        /*if(isInHouse){
+        if (part instanceof InHouse){
+            modifyChangeLabel.setText("Machine ID");
+            modifyChangeText.setText(Integer.toString(((InHouse)Inventory.getAllParts().get(index)).getMachineId()));
             inHouseModRBtn.setSelected(true);
-            modifyChangeText.setText(Integer.toString(inhousePart.getMachineId()));
+            isInHouse = true;
         }
         else{
+            modifyChangeLabel.setText("Company Name");
+            modifyChangeText.setText((((Outsourced)Inventory.getAllParts().get(index)).getCompanyName()));
             outsourceModRBtn.setSelected(true);
-            modifyChangeText.setText(outPart.getCompanyName());
+            isInHouse = false;
         }
-*/
-    }
-    
-    @Override
-    public void initialize(URL url, ResourceBundle rb) {
-        
         
     }    
     
