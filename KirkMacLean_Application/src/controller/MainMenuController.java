@@ -15,6 +15,8 @@ import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
+import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.Label;
@@ -81,6 +83,10 @@ public class MainMenuController implements Initializable {
     
     Stage stage;
     Parent scene;
+    public static Part selectedPart;
+    public static Product selectedProduct;
+    public static int selectedPartIndex;
+    public static int selectedProductIndex;
     
 
     @FXML
@@ -104,6 +110,7 @@ public class MainMenuController implements Initializable {
         
         stage.show();
         
+       
     }
 
     //When Clicked switch to Modify Part screen
@@ -112,24 +119,29 @@ public class MainMenuController implements Initializable {
         
         System.out.println("Modify Part");
         
-        //Switches to the Modify Part Menu Controller
+        selectedPart = partsTableView.getSelectionModel().getSelectedItem();
+        selectedPartIndex = Inventory.getAllParts().indexOf(selectedPart);
         
-        stage = (Stage)((Button)event.getSource()).getScene().getWindow();
+        if(selectedPart != null){
+            stage = (Stage)((Button)event.getSource()).getScene().getWindow();
         
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/ModifyPartMenu.fxml"));
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/ModifyPartMenu.fxml"));
+
+            scene = loader.load();
+
+            Scene view = new Scene(scene);
+
+            stage.setScene(view);
+
+            stage.show();
+        }
+        else{
+            Alert alert = new Alert(AlertType.INFORMATION);
+            alert.setTitle("Error");
+            alert.setContentText("Please select Part");
+            alert.showAndWait();
+        }
         
-        scene = loader.load();
-        
-        Scene view = new Scene(scene);
-        
-        stage.setScene(view);
-        
-        stage.show();
-        
-        //Transfers Data to Modify Part screen
-        ModifyPartMenuController controller = loader.getController();
-        Part part = partsTableView.getSelectionModel().getSelectedItem();
-        controller.setFields(part);
     }
 
     @FXML
