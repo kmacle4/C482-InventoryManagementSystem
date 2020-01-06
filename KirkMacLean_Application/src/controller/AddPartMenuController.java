@@ -72,6 +72,7 @@ public class AddPartMenuController implements Initializable {
     Parent scene;
     private boolean isInHouse;
     private int id;
+    private int counter;
     private ToggleGroup radioButtons;
     
 
@@ -103,6 +104,8 @@ public class AddPartMenuController implements Initializable {
     void onActionSaveAddPart(ActionEvent event) throws IOException {
         
         System.out.println("Save Part");
+        
+        //idCounter = Inventory.getAllParts().size()+1;
     
     
         String name = addPartNameText.getText();
@@ -118,8 +121,8 @@ public class AddPartMenuController implements Initializable {
                 
                 int machineId = Integer.parseInt(addPartChangeText.getText());
         
-                InHouse inhousePart = new InHouse(id, name, price, stock, min, max, machineId);
-                inhousePart.setId(id);
+                InHouse inhousePart = new InHouse(counter, name, price, stock, min, max, machineId);
+                inhousePart.setId(counter);
                 inhousePart.setName(name);
                 inhousePart.setPrice(price);
                 inhousePart.setStock(stock);
@@ -136,8 +139,8 @@ public class AddPartMenuController implements Initializable {
     
                 String companyName = addPartChangeText.getText();
                 
-                Outsourced outPart = new Outsourced (id, name, price, stock, min, max, companyName);
-                outPart.setId(id);
+                Outsourced outPart = new Outsourced (counter, name, price, stock, min, max, companyName);
+                outPart.setId(counter);
                 outPart.setName(name);
                 outPart.setPrice(price);
                 outPart.setStock(stock);
@@ -185,9 +188,7 @@ public class AddPartMenuController implements Initializable {
             outsourcedRBtn.setSelected(false);
         }
         
-
     }
-
     @FXML
     void onActionSetToOutscourced(ActionEvent event) {
         
@@ -200,7 +201,6 @@ public class AddPartMenuController implements Initializable {
             addPartLabelChange.setText("Company Name");
             inHouseRBtn.setSelected(false);
         }
-
     }
     */
     
@@ -223,25 +223,13 @@ public class AddPartMenuController implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         
-        
-        //Sets InHouse value to true
-        //isInHouse = true;
-        
         //Sets InHouse Radio Button checked by default
         inHouseRBtn.setSelected(true);
-        
-        //Toggle Group
-        radioButtons = new ToggleGroup();
-        this.inHouseRBtn.setToggleGroup(radioButtons);
-        this.outsourcedRBtn.setToggleGroup(radioButtons);
-        
-        
-        //Sets label to Machine ID since In House is selected by default
-        //addPartLabelChange.setText("Machine ID");
+       
         
         //Autogenerates Part ID
-        id = Inventory.getPartCounter();
-        addPartIDText.setText("Auto-Gen - Disabled");
+        counter = Inventory.getPartCounter();
+        addPartIDText.setText(Integer.toString(counter));
 
     }    
     
