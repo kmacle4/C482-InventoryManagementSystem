@@ -92,8 +92,5 @@ public abstract class Part {
         this.price = max;
     }
     
-    public static int getPartCounter(){   
-        partCounter++;
-        return partCounter;
-    }
+  
 }
