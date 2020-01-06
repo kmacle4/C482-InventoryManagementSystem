@@ -19,6 +19,8 @@ public class Inventory{
     private static ObservableList<Part> searchedParts = FXCollections.observableArrayList();
     private static ObservableList<Product> allProducts = FXCollections.observableArrayList();
     private static ObservableList<Product> searchedProducts = FXCollections.observableArrayList();
+    private static int partCount = 6;
+    private static int productCount = 3;
     
 
     //Methods
@@ -150,7 +152,16 @@ public class Inventory{
     
     }
     
+    public static int getPartCounter(){
+        partCount++;
+        return partCount;
+    }
+    
+    public static int getProductCounter(){
+        productCount++;
+        return productCount;
+    }
+    
 
     
 }
-
