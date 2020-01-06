@@ -108,9 +108,6 @@ public class Product {
         return associatedParts;
     }
     
-    public static int getProductCounter(){   
-        productCounter++;
-        return productCounter;
-    }
+
     
 }
