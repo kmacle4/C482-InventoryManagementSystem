@@ -186,7 +186,13 @@ public class ModifyProductMenuController implements Initializable {
         int min = Integer.parseInt(modProductMinText.getText());
         int max = Integer.parseInt(modProductMaxText.getText());
         
+        Product product = new Product(id, name, price, stock, min, max);
+        
         try{
+            for(Part part : associated){
+                product.addAssociatedPart(part);
+            }
+            
             if(min > max){
                 Alert alert = new Alert(Alert.AlertType.WARNING);
                 alert.setTitle("Warning");
@@ -194,7 +200,6 @@ public class ModifyProductMenuController implements Initializable {
                 alert.showAndWait();
             }
             else{
-                Product product = new Product(id, name, price, stock, min, max);
                 
                 Inventory.updateProduct(index, product);
             }
