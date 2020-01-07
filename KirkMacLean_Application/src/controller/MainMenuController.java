@@ -9,6 +9,8 @@ import java.io.IOException;
 import java.net.URL;
 import java.util.Optional;
 import java.util.ResourceBundle;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -87,14 +89,51 @@ public class MainMenuController implements Initializable {
     public static Product selectedProduct;
     public static int selectedPartIndex;
     public static int selectedProductIndex;
+    private ObservableList<Part> searchParts = FXCollections.observableArrayList();
+    private ObservableList<Product> searchProducts = FXCollections.observableArrayList();
     
-
+    /*
+        Parts
+    */
+    
     @FXML
     private void onActionSearchPart(ActionEvent event) {
     
         System.out.println("Search Part");
         
+        searchParts.clear();
+        
+        try {
+            try{
+                int id = Integer.parseInt(partSearchText.getText());
+                searchParts.add(Inventory.lookupPart(id));
+            }
+            catch(Exception e){
+                String name = partSearchText.getText();
+                searchParts = Inventory.lookupPart(name);
+            }
+            if(searchParts.size() == 0){
+                Alert alert = new Alert(Alert.AlertType.WARNING);
+                alert.setTitle("Warning");
+                alert.setContentText("Missing Part");
+            }
+            else {
+                partsTableView.setItems(searchParts);
+                partIdCol.setCellValueFactory(new PropertyValueFactory<>("id"));
+                partNameCol.setCellValueFactory(new PropertyValueFactory<>("name"));
+                partInvCol.setCellValueFactory(new PropertyValueFactory<>("stock"));
+                partPriceCol.setCellValueFactory(new PropertyValueFactory<>("price"));
+            }
+        
+        }
+        catch(Exception e){
+           Alert alert = new Alert(Alert.AlertType.WARNING);
+           alert.setTitle("Warning");
+           alert.setContentText("Missing Part"); 
+        }
     }
+        
+    
 
     //When Clicked switch to Add Part screen
     @FXML
@@ -155,20 +194,48 @@ public class MainMenuController implements Initializable {
          
     }
         
-       
+    /*
+        Products
+    */   
 
     @FXML
     private void onActionSearchProduct(ActionEvent event) {
         System.out.println("Search Product");
         
-        //Gets text from search bar
-        //String searchParts = partSearchText.getText();
+        searchProducts.clear();
         
+        try {
+            try{
+                int id = Integer.parseInt(productSearchText.getText());
+                searchProducts.add(Inventory.lookupProduct(id));
+            }
+            catch(Exception e){
+                String name = productSearchText.getText();
+                searchProducts = Inventory.lookupProduct(name);
+            }
+            if(searchProducts.size() == 0){
+                Alert alert = new Alert(Alert.AlertType.WARNING);
+                alert.setTitle("Warning");
+                alert.setContentText("Missing Part");
+            }
+            else {
+                productTableView.setItems(searchProducts);
+                productIdCol.setCellValueFactory(new PropertyValueFactory<>("id"));
+                productNameCol.setCellValueFactory(new PropertyValueFactory<>("name"));
+                productInvCol.setCellValueFactory(new PropertyValueFactory<>("stock"));
+                productPriceCol.setCellValueFactory(new PropertyValueFactory<>("price"));
+            }
         
-        
-        
+        }
+        catch(Exception e){
+           Alert alert = new Alert(Alert.AlertType.WARNING);
+           alert.setTitle("Warning");
+           alert.setContentText("Missing Part"); 
+        }
     }
 
+    
+    
     @FXML
     private void onActionAddProduct(ActionEvent event) throws IOException {
         
