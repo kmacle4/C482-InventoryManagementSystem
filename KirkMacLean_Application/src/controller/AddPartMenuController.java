@@ -105,73 +105,62 @@ public class AddPartMenuController implements Initializable {
         
         System.out.println("Save Part");
         
-        //idCounter = Inventory.getAllParts().size()+1;
-    
-    
         String name = addPartNameText.getText();
         double price = Double.parseDouble(addPartPriceText.getText());
         int stock = Integer.parseInt(addPartInvText.getText());
         int min = Integer.parseInt(addPartMinText.getText());
         int max = Integer.parseInt(addPartMaxText.getText());
-        
-       
+
 
         try {
-                if (isInHouse){
+            
+            if(min > max){
+                    Alert alert = new Alert(Alert.AlertType.WARNING);
+                    alert.setTitle("WARNING");
+                    alert.setContentText("Minimum is greater than maximum");
+                    alert.showAndWait();
+                    return;
+                } //if min max
+                else{
+                    if (isInHouse){
+
+                        int machineId = Integer.parseInt(addPartChangeText.getText());
+
+                        InHouse inhousePart = new InHouse(counter, name, price, stock, min, max, machineId);
+                       
+                        Inventory.addPart(inhousePart);
+
+                    } //if inhouse
                 
-                int machineId = Integer.parseInt(addPartChangeText.getText());
-        
-                InHouse inhousePart = new InHouse(counter, name, price, stock, min, max, machineId);
-                inhousePart.setId(counter);
-                inhousePart.setName(name);
-                inhousePart.setPrice(price);
-                inhousePart.setStock(stock);
-                inhousePart.setMin(min);
-                inhousePart.setMax(max);
-                inhousePart.setMachineId(machineId);
-                Inventory.addPart(inhousePart);
-                
-               
-        
-        
-                }
-        else{
-    
-                String companyName = addPartChangeText.getText();
-                
-                Outsourced outPart = new Outsourced (counter, name, price, stock, min, max, companyName);
-                outPart.setId(counter);
-                outPart.setName(name);
-                outPart.setPrice(price);
-                outPart.setStock(stock);
-                outPart.setMin(min);
-                outPart.setMax(max);
-                outPart.setCompanyName(companyName);
-                Inventory.addPart(outPart);
-                
-                
-        
+                    else{
+
+                        String companyName = addPartChangeText.getText();
+
+                        Outsourced outPart = new Outsourced (counter, name, price, stock, min, max, companyName);
+                        
+                        Inventory.addPart(outPart);
+
+                    } //else outsourced
+                } //else not min max check
+            } //end try
+            catch (NumberFormatException e) {
+                Alert alert = new Alert(Alert.AlertType.WARNING);
+                alert.setTitle("Warning Dialogue");
+                alert.setContentText("Please enter a valid value for each text field!");
+                alert.showAndWait();
+                return;
             }
+
+            stage = (Stage)((Button)event.getSource()).getScene().getWindow();
+
+            scene = FXMLLoader.load(getClass().getResource("/view/MainMenu.fxml"));
+
+            stage.setScene(new Scene(scene));
+
+            stage.show();
+
+
         }
-        catch (NumberFormatException e) {
-            Alert alert = new Alert(Alert.AlertType.WARNING);
-            alert.setTitle("Warning Dialogue");
-            alert.setContentText("Please enter a valid value for each text field!");
-            alert.showAndWait();
-        }
-
-    
-    
-        stage = (Stage)((Button)event.getSource()).getScene().getWindow();
-
-        scene = FXMLLoader.load(getClass().getResource("/view/MainMenu.fxml"));
-
-        stage.setScene(new Scene(scene));
-
-        stage.show();
-            
-            
-    }
     
     /*@FXML
     void onActionSetToInHouse(ActionEvent event) {
@@ -223,9 +212,14 @@ public class AddPartMenuController implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         
-        //Sets InHouse Radio Button checked by default
-        inHouseRBtn.setSelected(true);
-       
+        //Toggle Group
+        radioButtons = new ToggleGroup();
+        this.inHouseRBtn.setToggleGroup(radioButtons);
+        this.outsourcedRBtn.setToggleGroup(radioButtons);
+        
+        //Selects InHouse as defualt and sets value to true
+        this.inHouseRBtn.setSelected(true);
+        isInHouse = true;
         
         //Autogenerates Part ID
         counter = Inventory.getPartCounter();
