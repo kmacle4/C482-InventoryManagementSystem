@@ -21,6 +21,7 @@ import javafx.scene.control.ButtonType;
 import javafx.scene.control.Label;
 import javafx.scene.control.RadioButton;
 import javafx.scene.control.TextField;
+import javafx.scene.control.ToggleGroup;
 import javafx.stage.Stage;
 import model.InHouse;
 import model.Inventory;
@@ -116,11 +117,20 @@ public class ModifyPartMenuController implements Initializable {
        else{
            try{
                if(isInHouse){
-                   int machineId = Integer.parseInt(modifyChangeLabel.getText());
                    
-                   InHouse part = new InHouse(id, name, price, stock, min, max, machineId);
+                   int machineId = Integer.parseInt(modifyChangeText.getText());
                    
-                   Inventory.updatePart(index, part);
+                   InHouse iPart = new InHouse(id, name, price, stock, min, max, machineId);
+                   /*
+                   part.setId(id);
+                   part.setName(name);
+                   part.setPrice(price);
+                   part.setStock(stock);
+                   part.setMin(min);
+                   part.setMax(max);
+                   part.setMachineId(machineId);
+                   */
+                   Inventory.updatePart(index, iPart);
                    
                    //SUCCESSFUL
                    Alert alert = new Alert(Alert.AlertType.INFORMATION);
@@ -141,11 +151,19 @@ public class ModifyPartMenuController implements Initializable {
                     stage.show();
                }
                else{
-                   String companyName = modifyChangeLabel.getText();
+                   String companyName = modifyChangeText.getText();
                    
-                   Outsourced part = new Outsourced(id, name, price, stock, min, max, companyName);
-                   
-                   Inventory.updatePart(index, part);
+                   Outsourced oPart = new Outsourced(id, name, price, stock, min, max, companyName);
+                   /*
+                   part.setId(id);
+                   part.setName(name);
+                   part.setPrice(price);
+                   part.setStock(stock);
+                   part.setMin(min);
+                   part.setMax(max);
+                   part.setCompanyName(companyName);
+                    */
+                   Inventory.updatePart(index, oPart);
                    
                    //SUCCESSFUL
                    Alert alert = new Alert(Alert.AlertType.INFORMATION);
@@ -175,6 +193,7 @@ public class ModifyPartMenuController implements Initializable {
        }
     }
     
+    
     @FXML
     void onActionModInHouse(ActionEvent event) {
 
@@ -183,6 +202,7 @@ public class ModifyPartMenuController implements Initializable {
         isInHouse = true;
         modifyChangeLabel.setText("Machine ID");
         outsourceModRBtn.setSelected(false);
+        modifyChangeText.clear();
         
     }
 
@@ -194,11 +214,12 @@ public class ModifyPartMenuController implements Initializable {
         isInHouse = false;
         modifyChangeLabel.setText("Company Name");
         inHouseModRBtn.setSelected(false);
-        
+        modifyChangeText.clear();
         
     }
     
   
+    
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         part = MainMenuController.selectedPart;
@@ -217,12 +238,14 @@ public class ModifyPartMenuController implements Initializable {
             inHouseModRBtn.setSelected(true);
             isInHouse = true;
         }
-        else{
+        
+         if (part instanceof Outsourced){
             modifyChangeLabel.setText("Company Name");
             modifyChangeText.setText((((Outsourced)Inventory.getAllParts().get(index)).getCompanyName()));
             outsourceModRBtn.setSelected(true);
             isInHouse = false;
         }
+        
         
     }    
     
