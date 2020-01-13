@@ -127,6 +127,23 @@ public class ModifyProductMenuController implements Initializable {
         modProductPriceText.setText(Double.toString(product.getPrice()));
         modProductMinText.setText(Integer.toString(product.getMin()));
         modProductMaxText.setText(Integer.toString(product.getMax()));
+        
+        topIdCol.setCellValueFactory(new PropertyValueFactory<>("id"));
+        topNameCol.setCellValueFactory(new PropertyValueFactory<>("name"));
+        topInvCol.setCellValueFactory(new PropertyValueFactory<>("stock"));
+        topPriceCol.setCellValueFactory(new PropertyValueFactory<>("price"));
+        
+        bottomIdCol.setCellValueFactory(new PropertyValueFactory<>("id"));
+        bottomNameCol.setCellValueFactory(new PropertyValueFactory<>("name"));
+        bottomInvCol.setCellValueFactory(new PropertyValueFactory<>("stock"));
+        bottomPriceCol.setCellValueFactory(new PropertyValueFactory<>("price"));
+        
+        topTableView.setItems(Inventory.getAllParts());
+        associated.addAll(product.getAllAssociatedParts());
+        bottomTableView.setItems(associated);
+        
+        
+        
     }    
 
     @FXML
@@ -159,6 +176,11 @@ public class ModifyProductMenuController implements Initializable {
            alert.setTitle("Warning");
            alert.setContentText("Missing Part"); 
         }
+        
+        //If user searches a blank text field table displays all parts
+        if (searchProductText.getText().equals("")){
+            topTableView.setItems(Inventory.getAllParts());
+        }
     }
 
     @FXML
@@ -174,7 +196,15 @@ public class ModifyProductMenuController implements Initializable {
 
     @FXML
     private void onActionDeleteProduct(ActionEvent event) {
-        associated.remove(bottomTableView.getSelectionModel().getSelectedItem());
+        Alert alert = new Alert(Alert.AlertType.CONFIRMATION, "The selected Item will be deleted. Are you sure you want to delete?");
+        
+        Optional<ButtonType> result = alert.showAndWait();
+        
+        if(result.isPresent() && result.get() == ButtonType.OK){
+            
+            associated.remove(bottomTableView.getSelectionModel().getSelectedItem());
+            
+        }
     }
 
     @FXML
@@ -186,21 +216,24 @@ public class ModifyProductMenuController implements Initializable {
         int min = Integer.parseInt(modProductMinText.getText());
         int max = Integer.parseInt(modProductMaxText.getText());
         
-        Product product = new Product(id, name, price, stock, min, max);
+        
         
         try{
-            for(Part part : associated){
-                product.addAssociatedPart(part);
-            }
-            
             if(min > max){
                 Alert alert = new Alert(Alert.AlertType.WARNING);
                 alert.setTitle("Warning");
                 alert.setContentText("Minimum is greater than maximum");
                 alert.showAndWait();
+                return;
             }
             else{
+                Product product = new Product(id, name, price, stock, min, max);
+
                 
+                for(Part part : associated) {
+                    product.addAssociatedPart(part);
+                }
+            
                 Inventory.updateProduct(index, product);
             }
         }
@@ -218,6 +251,7 @@ public class ModifyProductMenuController implements Initializable {
         stage.setScene(new Scene(scene));
 
         stage.show();
+       
     }
     
 
