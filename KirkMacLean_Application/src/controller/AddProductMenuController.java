@@ -111,13 +111,9 @@ public class AddProductMenuController implements Initializable {
 
     @FXML
     void onActionAddProduct(ActionEvent event) {
-        associated.add(topTableView.getSelectionModel().getSelectedItem());
         Part part = topTableView.getSelectionModel().getSelectedItem();
+        associated.add(part);
         bottomTableView.setItems(associated);
-        associatedIdCol.setCellValueFactory(new PropertyValueFactory<>("id"));
-        associatedNameCol.setCellValueFactory(new PropertyValueFactory<>("name"));
-        associatedInvCol.setCellValueFactory(new PropertyValueFactory<>("stock"));
-        associatedPriceCol.setCellValueFactory(new PropertyValueFactory<>("price"));
     }
 
     @FXML
@@ -141,8 +137,18 @@ public class AddProductMenuController implements Initializable {
     }
 
     @FXML
-    void onActionDeleteProduct(ActionEvent event) {
-        associated.remove(bottomTableView.getSelectionModel().getSelectedItem());
+    void onActionDeleteProduct(ActionEvent event) throws IOException {
+        
+        Alert alert = new Alert(Alert.AlertType.CONFIRMATION, "The selected Item will be deleted. Are you sure you want to delete?");
+        
+        Optional<ButtonType> result = alert.showAndWait();
+        
+        if(result.isPresent() && result.get() == ButtonType.OK){
+            
+            associated.remove(bottomTableView.getSelectionModel().getSelectedItem());
+            
+        }
+       
     }
 
     @FXML
@@ -156,21 +162,20 @@ public class AddProductMenuController implements Initializable {
         
         Product product = new Product(counter, name, price, stock, min, max);
         try{
-            if(addProductNameText.getText().equals("")){
+            if(min > max){
                 Alert alert = new Alert(Alert.AlertType.WARNING);
                 alert.setTitle("Warning");
-                alert.setContentText("Missing Name");
-                alert.showAndWait();
-            }
-            else if(min > max){
-                Alert alert = new Alert(Alert.AlertType.WARNING);
-                alert.setTitle("Warning");
-                alert.setContentText("Minimum is greater tha Maximum");
+                alert.setContentText("Minimum is greater than Maximum");
                 alert.showAndWait();
             }
             else{
+                
+                for(Part part : associated) {
+                    product.addAssociatedPart(part);
+                }
+                
                 Inventory.addProduct(product);
-                associated.clear();
+                
             }
         }
         catch (Exception e){
@@ -219,6 +224,11 @@ public class AddProductMenuController implements Initializable {
            alert.setTitle("Warning");
            alert.setContentText("Missing Part"); 
         }
+        
+        //If user searches a blank text field table displays all parts
+        if (searchProductText.getText().equals("")){
+            topTableView.setItems(Inventory.getAllParts());
+        }
     }
 
     @Override
@@ -238,6 +248,7 @@ public class AddProductMenuController implements Initializable {
         
         //Update Table
         topTableView.setItems(Inventory.getAllParts());
+        bottomTableView.setItems(associated);
         
         counter = Inventory.getProductCounter();
         addProductIdText.setText(Integer.toString(counter));
